@@ -1,19 +1,22 @@
 package main
 
 import (
+	"vervain/internal/config"
+	"vervain/internal/middleware"
+	"vervain/internal/routes"
+
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	r := gin.Default()
 
-	// Basic route
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Welcome to Vervain!",
-		})
-	})
+	cfg := config.LoadConfig()
 
-	// Start the server
-	r.Run(":8080") // Listen on http://localhost:8080
+	r.Use(middleware.LoggerMiddleware())
+
+	routes.RegisterRoutes(r)
+
+	r.Run(":8080")
+	r.Run(":" + cfg.Port)
 }
