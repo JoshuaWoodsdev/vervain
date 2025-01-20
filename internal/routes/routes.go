@@ -1,11 +1,17 @@
 package routes
 
 import (
-	"vervain/internal/controllers"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterRoutes(r *gin.Engine) {
-	r.GET("/", controllers.HomeHandler)
+	// Handle the root route ("/") and serve HTML
+	r.GET("/", func(c *gin.Context) {
+		// Respond with an HTML file or static content
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"title": "Home Page",
+		})
+	})
 }
