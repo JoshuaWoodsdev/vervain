@@ -18,7 +18,7 @@ func main() {
 	r.Use(CORSMiddleware())
 
 	// Load HTML templates from the "templates" folder
-	r.LoadHTMLGlob("../templates/*")
+	r.LoadHTMLGlob("templates/*")
 
 	routes.RegisterRoutes(r)
 
