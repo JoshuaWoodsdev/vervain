@@ -1,39 +1,42 @@
-/*
-Copyright © 2025 Joshua Woods <joshua.lamar.woods@gmail.com>
-*/
 package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/spf13/cobra"
 )
 
+var template string
+var path string
+
 // newCmd represents the new command
 var newCmd = &cobra.Command{
-	Use:   "new",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Use:   "new [project-name]",
+	Short: "Create a new Vervain project",
+	Long:  `Generates a new Vervain project with optional templates and directory paths.`,
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("new called")
+		projectName := args[0]
+
+		// Check if path is defined; use default otherwise
+		if path == "" {
+			path = "./" + projectName
+		}
+
+		fmt.Printf("Creating project %s at %s with template %s\n", projectName, path, template)
+
+		err := os.MkdirAll(path, os.ModePerm)
+		if err != nil {
+			fmt.Println("Error creating directory:", err)
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(newCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// newCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// newCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// Flags for the new command
+	newCmd.Flags().StringVarP(&template, "template", "t", "web", "Specify project template (api, web, fullstack)")
+	newCmd.Flags().StringVarP(&path, "path", "p", "", "Specify directory for the project")
 }
