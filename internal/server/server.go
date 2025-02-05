@@ -17,7 +17,7 @@ func StartServer() {
 	r.Use(middleware.LoggerMiddleware())
 	r.Use(CORSMiddleware())
 
-	r.LoadHTMLGlob("templates/*")
+	r.LoadHTMLGlob("templates/default/*.html")
 	routes.RegisterRoutes(r)
 	r.Static("/static", "./static")
 
